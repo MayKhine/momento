@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
-
-import type { Todo } from "../types"
+import { Todo } from "../components/todo"
+import type { TodoType } from "../types"
 const STORAGE_KEY = "momento_todo_list"
 
 export const TodoPage = () => {
-  const todoListDefault: Array<Todo> = [
+  const todoListDefault: Array<TodoType> = [
     {
       id: uuidv4(),
       title: "Code for one hour",
@@ -17,6 +17,7 @@ export const TodoPage = () => {
       done: false,
     },
   ]
+
   const [todoList, setTodoList] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -43,7 +44,7 @@ export const TodoPage = () => {
       setNewTodoError(true)
       return
     }
-    setTodoList((prev: Array<Todo>) => [
+    setTodoList((prev: Array<TodoType>) => [
       ...prev,
       {
         id: uuidv4(),
@@ -55,10 +56,16 @@ export const TodoPage = () => {
   }
 
   const toggleTask = (id: string) => {
-    setTodoList((prev: Array<Todo>) =>
-      prev.map((todo: Todo) =>
+    setTodoList((prev: Array<TodoType>) =>
+      prev.map((todo: TodoType) =>
         todo.id === id ? { ...todo, done: !todo.done } : todo
       )
+    )
+  }
+
+  const deleteTask = (id: string) => {
+    setTodoList((prev: Array<TodoType>) =>
+      prev.filter((todo) => todo.id !== id)
     )
   }
 
@@ -91,20 +98,15 @@ export const TodoPage = () => {
           )}
         </div>
 
-        <div>
-          {todoList.map((todo: Todo, index: number) => {
+        <div className="flex-col">
+          {todoList.map((todo: TodoType, index: number) => {
             return (
-              <li key={index}>
-                <input
-                  type="checkbox"
-                  checked={todo.done}
-                  onChange={() => {
-                    console.log("toggle task")
-                    toggleTask(todo.id)
-                  }}
-                />
-                {todo.title}
-              </li>
+              <Todo
+                key={index}
+                todo={todo}
+                onToggle={toggleTask}
+                onDelete={deleteTask}
+              />
             )
           })}
         </div>
