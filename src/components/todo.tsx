@@ -9,7 +9,7 @@ type TodoProps = {
 
 export const Todo = ({ todo, onToggle, onDelete }: TodoProps) => {
   return (
-    <li className="flex gap-2 p-2 mb-2 bg-amber-100 ">
+    <li className="flex gap-2 p-2 mb-2">
       {!todo.done && (
         <div
           className="hover:cursor-pointer align-top "
@@ -17,7 +17,7 @@ export const Todo = ({ todo, onToggle, onDelete }: TodoProps) => {
             onToggle(todo.id)
           }}
         >
-          <FaRegCircle className="w-5 h-5 mt-1" />
+          <FaRegCircle className="w-5 h-5 mt-0.5" strokeWidth={1} />
         </div>
       )}
 
@@ -28,7 +28,7 @@ export const Todo = ({ todo, onToggle, onDelete }: TodoProps) => {
             onToggle(todo.id)
           }}
         >
-          <FaRegCheckCircle className="w-5 h-5 mt-1" />
+          <FaRegCheckCircle className="w-5 h-5 mt-0.5 mt-1" strokeWidth={1} />
         </div>
       )}
 
@@ -39,7 +39,7 @@ export const Todo = ({ todo, onToggle, onDelete }: TodoProps) => {
           onDelete(todo.id)
         }}
       >
-        <FaRegTimesCircle className="w-5 h-5 mt-1" />
+        <FaRegTimesCircle className="w-10 h-5 mt-0.5" />
       </button>
     </li>
   )

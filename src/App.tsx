@@ -1,9 +1,10 @@
+import { Header } from "./components/Header"
 import { TodoPage } from "./pages/TodoPage"
 
 export const App = () => {
   return (
-    <div>
-      <h1 className="font-bold text-2xl">Momento</h1>
+    <div className="bg-pink-200 h-full">
+      <Header />
       <TodoPage />
     </div>
   )
