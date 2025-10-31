@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { Todo } from "../components/todo"
 import type { TodoType } from "../types"
 import { ActionButton } from "../components/ActionButton"
-import { Header } from "../components/Header"
 import { SideBar } from "../components/SideBar"
+import { Todo } from "../components/Todo"
 const STORAGE_KEY = "momento_todo_list"
 
 // type TodoPageProps = {

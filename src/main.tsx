@@ -9,14 +9,10 @@ import { HomePage } from "./pages/HomePage.tsx"
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      {/* <nav>
-        <Link to="/">Home</Link>
-        <Link to="/todos">Todos</Link>
-      </nav> */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/todos" element={<TodoPage />} />
-        <Route path="/project" element={<ProjectPage />} />
+        <Route path="/projects/:projectid" element={<ProjectPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
