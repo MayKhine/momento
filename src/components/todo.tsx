@@ -28,7 +28,7 @@ export const Todo = ({ todo, onToggle, onDelete }: TodoProps) => {
             onToggle(todo.id)
           }}
         >
-          <FaRegCheckCircle className="w-5 h-5 mt-0.5 mt-1" strokeWidth={1} />
+          <FaRegCheckCircle className="w-5 h-5 mt-0.5" strokeWidth={1} />
         </div>
       )}
 

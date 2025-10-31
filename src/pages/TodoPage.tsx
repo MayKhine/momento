@@ -3,8 +3,13 @@ import { v4 as uuidv4 } from "uuid"
 import { Todo } from "../components/todo"
 import type { TodoType } from "../types"
 import { ActionButton } from "../components/ActionButton"
+import { Header } from "../components/Header"
+import { SideBar } from "../components/SideBar"
 const STORAGE_KEY = "momento_todo_list"
 
+// type TodoPageProps = {
+//   todoListDefault: Array<TodoType>
+// }
 export const TodoPage = () => {
   const todoListDefault: Array<TodoType> = [
     {
@@ -18,7 +23,6 @@ export const TodoPage = () => {
       done: false,
     },
   ]
-
   const [todoList, setTodoList] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -71,42 +75,44 @@ export const TodoPage = () => {
   }
 
   return (
-    <div className=" bg-gray-50">
-      <div className="flex-row h-30 p-2 content-center">
-        <div className="flex gap-3 ">
-          <input
-            value={newTodo}
-            onChange={(e) => {
-              setNewTodoError(false)
-              setNewTodo(e.target.value)
-            }}
-            onKeyDown={(e) => e.key === "Enter" && addTask()}
-            placeholder="Add a new task..."
-            className="flex-1 px-3 py-2 border-2 rounded-lg w-100"
-          />
+    <div className=" flex bg-gray-50">
+      <SideBar />
+      <div className="flex-col grow">
+        <div className="flex flex-row gap-2 p-2 pt-4 pb-4 content-center bg-amber-100 flex-wrap justify-end">
+          <div className="flex flex-col grow">
+            <input
+              value={newTodo}
+              onChange={(e) => {
+                setNewTodoError(false)
+                setNewTodo(e.target.value)
+              }}
+              onKeyDown={(e) => e.key === "Enter" && addTask()}
+              placeholder="Add a new task..."
+              className="flex-1 px-3 py-2 border-2 rounded-lg"
+            />
+            <div className="h-3">
+              {newTodoError && (
+                <div className="text-red-600 text-sm">
+                  Please write something in the box
+                </div>
+              )}
+            </div>
+          </div>
           <ActionButton text="Add Task" onClick={addTask} />
         </div>
 
-        <div className="h-4">
-          {newTodoError && (
-            <div className="text-red-600 text-sm">
-              Please write something in the box
-            </div>
-          )}
+        <div className="flex-col">
+          {todoList.map((todo: TodoType, index: number) => {
+            return (
+              <Todo
+                key={index}
+                todo={todo}
+                onToggle={toggleTask}
+                onDelete={deleteTask}
+              />
+            )
+          })}
         </div>
-      </div>
-
-      <div className="flex-col">
-        {todoList.map((todo: TodoType, index: number) => {
-          return (
-            <Todo
-              key={index}
-              todo={todo}
-              onToggle={toggleTask}
-              onDelete={deleteTask}
-            />
-          )
-        })}
       </div>
     </div>
   )
