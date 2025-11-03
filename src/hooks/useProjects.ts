@@ -2,13 +2,9 @@ import { useState } from "react"
 import { defaultProjects } from "../data/defaultProjects"
 import type { ProjectType } from "../types"
 const STORAGE_KEY = "momento_projects"
-import { v4 as uuidv4 } from "uuid"
 
 export const useProjects = () => {
   const [projects, setProjects] = useState(() => {
-    // const rawProjects = localStorage.getItem("momento_projects")
-    // return rawProjects ? JSON.parse(rawProjects) : defaultProjects
-
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) return JSON.parse(stored)
@@ -24,22 +20,28 @@ export const useProjects = () => {
       console.log("title is empty")
       return
     }
-    setProjects((prev: Array<ProjectType>) => [
-      ...prev,
-      {
-        // id: uuidv4(),
-        // title: newProject.title.trim(),
-        // description: newProject.description.trim(),
-        // createdAt: new Date().toISOString(),
-        newProject,
-      },
-    ])
-    localStorage.setItem("momento_projects", JSON.stringify(projects))
+    setProjects((prev: Array<ProjectType>) => [...prev, newProject])
+
+    localStorage.setItem(
+      "momento_projects",
+      JSON.stringify([...projects, newProject])
+    )
+
     console.log("added the new project")
   }
 
   const deleteProject = (id: string) => {
     console.log("delete proejct: ", id)
+    setProjects((prev: Array<ProjectType>) =>
+      prev.filter((project) => project.id !== id)
+    )
+    localStorage.setItem(
+      "momento_projects",
+      JSON.stringify(
+        projects.filter((project: ProjectType) => project.id !== id)
+      )
+    )
+    console.log("deleted the  project")
   }
 
   return { projects, addProject, deleteProject }

@@ -7,17 +7,25 @@ import { v4 as uuidv4 } from "uuid"
 
 export const SideBar = () => {
   const [newProject, setNewProject] = useState({
-    id: uuidv4(),
     title: "",
     description: "",
-    createdAt: new Date().toISOString(),
   })
   const addNewProject = () => {
     console.log("in the side bar: add new proejct")
-    addProject(newProject)
+    addProject({
+      id: uuidv4(),
+      title: newProject.title.trim(),
+      description: newProject.description.trim(),
+      createdAt: new Date().toISOString(),
+    })
+
+    setNewProject({
+      title: "",
+      description: "",
+    })
   }
 
-  const { projects, addProject } = useProjects()
+  const { projects, addProject, deleteProject } = useProjects()
   console.log("projects; ", projects)
 
   return (
@@ -32,9 +40,19 @@ export const SideBar = () => {
         <div className="bg-pink-200 flex flex-col">
           {projects.map((project: ProjectType) => {
             return (
-              <Link key={project.id} to="/projects/${project.title}">
-                {project.title}
-              </Link>
+              <div key={project.id}>
+                <Link key={project.id} to="/projects/${project.title}">
+                  {project.title}
+                </Link>
+                <button
+                  onClick={() => {
+                    console.log("delete project", project.title)
+                    deleteProject(project.id)
+                  }}
+                >
+                  Del
+                </button>{" "}
+              </div>
             )
           })}
         </div>
@@ -44,7 +62,9 @@ export const SideBar = () => {
         <div className="flex flex-col grow">
           <input
             value={newProject?.title}
-            onChange={}
+            onChange={(e) => {
+              setNewProject((prev) => ({ ...prev, title: e.target.value }))
+            }}
             // onKeyDown={(e) => e.key === "Enter" && addProject()}
             placeholder="Add a new project..."
             className="px-3 py-2 border-2 rounded-lg"
@@ -60,7 +80,7 @@ export const SideBar = () => {
         <ActionButton
           text="Create"
           onClick={() => {
-            addProject(newProject)
+            addNewProject()
           }}
         />
       </div>
