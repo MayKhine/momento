@@ -6,11 +6,16 @@ import type { ProjectType } from "../types"
 import { v4 as uuidv4 } from "uuid"
 
 export const SideBar = () => {
-  const [newProject, setNewProject] = useState("")
-  // const addProject = () => {
-  //   console.log("add project is clicked", newProjet)
-  //   setNewProject("")
-  // }
+  const [newProject, setNewProject] = useState({
+    id: uuidv4(),
+    title: "",
+    description: "",
+    createdAt: new Date().toISOString(),
+  })
+  const addNewProject = () => {
+    console.log("in the side bar: add new proejct")
+    addProject(newProject)
+  }
 
   const { projects, addProject } = useProjects()
   console.log("projects; ", projects)
@@ -38,10 +43,8 @@ export const SideBar = () => {
       <div className="flex flex-col justify-end items-end ">
         <div className="flex flex-col grow">
           <input
-            value={newProject}
-            onChange={(e) => {
-              setNewProject(e.target.value.trim())
-            }}
+            value={newProject?.title}
+            onChange={}
             // onKeyDown={(e) => e.key === "Enter" && addProject()}
             placeholder="Add a new project..."
             className="px-3 py-2 border-2 rounded-lg"
@@ -57,13 +60,7 @@ export const SideBar = () => {
         <ActionButton
           text="Create"
           onClick={() => {
-            const project: ProjectType = {
-              id: uuidv4(),
-              title: newProject,
-              description: "test desc",
-            }
-            console.log("Proejct to add: ", project)
-            addProject(project)
+            addProject(newProject)
           }}
         />
       </div>
