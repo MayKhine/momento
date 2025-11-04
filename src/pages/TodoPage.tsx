@@ -4,73 +4,28 @@ import type { TodoType } from "../types"
 import { ActionButton } from "../components/ActionButton"
 import { SideBar } from "../components/SideBar"
 import { Todo } from "../components/Todo"
-const STORAGE_KEY = "momento_todo_list"
+import { useTodos } from "../hooks/useTodos"
 
-// type TodoPageProps = {
-//   todoListDefault: Array<TodoType>
-// }
 export const TodoPage = () => {
-  const todoListDefault: Array<TodoType> = [
-    {
-      id: uuidv4(),
-      title: "Code for one hour",
-      done: true,
-    },
-    {
-      id: uuidv4(),
-      title: "Reply emails",
-      done: false,
-    },
-  ]
-  const [todoList, setTodoList] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) return JSON.parse(stored)
-    } catch (e) {
-      console.warn("Failed to parse stored todos:", e)
-    }
-    return todoListDefault
-  })
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(todoList))
-    } catch (e) {
-      console.error("Failed to save todos:", e)
-    }
-  }, [todoList])
-
+  const { todos, addTodo, deleteTodo, toggleTodo } = useTodos()
   const [newTodo, setNewTodo] = useState("")
   const [newTodoError, setNewTodoError] = useState(false)
 
-  const addTask = () => {
+  // const toggleTask = (id: string) => {
+  //   setTodoList((prev: Array<TodoType>) =>
+  //     prev.map((todo: TodoType) =>
+  //       todo.id === id ? { ...todo, done: !todo.done } : todo
+  //     )
+  //   )
+  // }
+
+  const addNewTodo = () => {
     if (newTodo.length == 0) {
-      setNewTodoError(true)
+      console.log(" no todo . len 0")
       return
     }
-    setTodoList((prev: Array<TodoType>) => [
-      ...prev,
-      {
-        id: uuidv4(),
-        title: newTodo.trim(),
-        done: false,
-      },
-    ])
+    addTodo({ id: uuidv4(), title: newTodo, done: false })
     setNewTodo("")
-  }
-
-  const toggleTask = (id: string) => {
-    setTodoList((prev: Array<TodoType>) =>
-      prev.map((todo: TodoType) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
-      )
-    )
-  }
-
-  const deleteTask = (id: string) => {
-    setTodoList((prev: Array<TodoType>) =>
-      prev.filter((todo) => todo.id !== id)
-    )
   }
 
   return (
@@ -85,7 +40,7 @@ export const TodoPage = () => {
                 setNewTodoError(false)
                 setNewTodo(e.target.value)
               }}
-              onKeyDown={(e) => e.key === "Enter" && addTask()}
+              onKeyDown={(e) => e.key === "Enter" && addNewTodo()}
               placeholder="Add a new task..."
               className="flex-1 px-3 py-2 border-2 rounded-lg"
             />
@@ -97,17 +52,19 @@ export const TodoPage = () => {
               )}
             </div>
           </div>
-          <ActionButton text="Add Task" onClick={addTask} />
+          <ActionButton text="Add Task" onClick={addNewTodo} />
         </div>
 
         <div className="flex-col">
-          {todoList.map((todo: TodoType, index: number) => {
+          {todos.map((todo: TodoType, index: number) => {
             return (
               <Todo
                 key={index}
                 todo={todo}
-                onToggle={toggleTask}
-                onDelete={deleteTask}
+                onToggle={toggleTodo}
+                onDelete={() => {
+                  deleteTodo(todo.id)
+                }}
               />
             )
           })}

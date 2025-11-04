@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useProjects } from "../hooks/useProjects"
 import type { ProjectType } from "../types"
 import { v4 as uuidv4 } from "uuid"
+import { FaRegTimesCircle } from "react-icons/fa"
 
 export const SideBar = () => {
   const [newProject, setNewProject] = useState({
@@ -29,29 +30,33 @@ export const SideBar = () => {
   console.log("projects; ", projects)
 
   return (
-    <div className="flex flex-col gap-10 min-w-50 min-h-screen bg-amber-200 p-4">
+    <div className="flex flex-col gap-10 min-w-70 max-w-70 min-h-screen bg-amber-200 p-4">
       <h1 className="font-bold text-3xl">
         <Link to="/">MoMento</Link>
       </h1>
-      <nav className=" flex gap-2 flex-col bg-amber-300">
+      <nav className="flex gap-2 flex-col bg-amber-300">
         <Link to="/">Home</Link>
         <Link to="/todos">Todos</Link>
         <Link to="/projects/:projectid">Project</Link>
-        <div className="bg-pink-200 flex flex-col">
+        <div className="flex flex-col gap-2">
           {projects.map((project: ProjectType) => {
             return (
-              <div key={project.id}>
-                <Link key={project.id} to="/projects/${project.title}">
+              <div key={project.id} className="flex justify-between">
+                <Link
+                  className="wrap-anywhere"
+                  key={project.id}
+                  to="/projects/${project.title}"
+                >
                   {project.title}
                 </Link>
                 <button
+                  className="p-2 pt-1 self-start"
                   onClick={() => {
-                    console.log("delete project", project.title)
                     deleteProject(project.id)
                   }}
                 >
-                  Del
-                </button>{" "}
+                  <FaRegTimesCircle />
+                </button>
               </div>
             )
           })}
@@ -65,7 +70,7 @@ export const SideBar = () => {
             onChange={(e) => {
               setNewProject((prev) => ({ ...prev, title: e.target.value }))
             }}
-            // onKeyDown={(e) => e.key === "Enter" && addProject()}
+            onKeyDown={(e) => e.key === "Enter" && addNewProject()}
             placeholder="Add a new project..."
             className="px-3 py-2 border-2 rounded-lg"
           />
@@ -77,12 +82,7 @@ export const SideBar = () => {
                     )} */}
           </div>
         </div>
-        <ActionButton
-          text="Create"
-          onClick={() => {
-            addNewProject()
-          }}
-        />
+        <ActionButton text="Create" onClick={addNewProject} />
       </div>
     </div>
   )
