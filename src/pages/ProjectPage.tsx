@@ -12,10 +12,13 @@ export const ProjectPage = () => {
   return (
     <div className=" flex bg-gray-50">
       <SideBar />
-      <div className="flex flex-col p-5 gap-11">
-        <h1 className="text-xl font-bold">{project.title}</h1>
-        <div className="h-full bg-gray-300"> laielriaje</div>
-      </div>
+      {project && (
+        <div className="flex flex-col p-5 gap-11">
+          <h1 className="text-xl font-bold">{project.title}</h1>
+          <div className="h-full bg-gray-300"> laielriaje</div>
+        </div>
+      )}
+      {!project && <div> No project data </div>}
     </div>
   )
 }

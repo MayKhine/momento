@@ -1,10 +1,9 @@
 import { useState } from "react"
 import { defaultProjects } from "../data/defaultProjects"
 import type { ProjectType } from "../types"
-import { ProjectPage } from "../pages/ProjectPage"
-const STORAGE_KEY = "momento_projects"
-
 export const useProjects = () => {
+  const STORAGE_KEY = "momento_projects"
+
   const [projects, setProjects] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -23,10 +22,7 @@ export const useProjects = () => {
     }
     setProjects((prev: Array<ProjectType>) => [...prev, newProject])
 
-    localStorage.setItem(
-      "momento_projects",
-      JSON.stringify([...projects, newProject])
-    )
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...projects, newProject]))
 
     console.log("added the new project")
   }
@@ -37,7 +33,7 @@ export const useProjects = () => {
       prev.filter((project) => project.id !== id)
     )
     localStorage.setItem(
-      "momento_projects",
+      STORAGE_KEY,
       JSON.stringify(
         projects.filter((project: ProjectType) => project.id !== id)
       )

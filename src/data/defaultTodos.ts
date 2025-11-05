@@ -1,17 +1,17 @@
 export const defaultTodos = [
   {
-    id: "default-1",
-    title: "exercise",
-    done: false,
+    taskId: "default-1",
+    task: "exercise",
+    complete: false,
   },
   {
-    id: "default-2",
-    title: "check email",
-    done: true,
+    taskId: "default-2",
+    task: "check email",
+    complete: true,
   },
   {
-    id: "default-3",
-    title: "tidy up the kitchen",
-    done: false,
+    taskId: "default-3",
+    task: "tidy up the kitchen",
+    complete: false,
   },
 ]

@@ -1,7 +1,7 @@
 export interface TodoType {
-  id: string
-  title: string
-  done: boolean
+  taskId: string
+  task: string
+  complete: boolean
 }
 
 export interface ProjectType {

@@ -1,9 +1,10 @@
 import { useState } from "react"
 import { defaultTodos } from "../data/defaultTodos"
 import type { TodoType } from "../types"
-const STORAGE_KEY = "momento_todos"
 
 export const useTodos = () => {
+  const STORAGE_KEY = "momento_todos"
+
   const [todos, setTodos] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -16,7 +17,7 @@ export const useTodos = () => {
 
   const addTodo = (newTodo: TodoType) => {
     console.log("In hook: add todo")
-    if (newTodo.title.length == 0) {
+    if (newTodo.task.length == 0) {
       console.log("Todo title is empty")
       return
     }
@@ -27,27 +28,29 @@ export const useTodos = () => {
     console.log("added the new todo")
   }
 
-  const toggleTodo = (id: string) => {
+  const toggleTodo = (taskId: string) => {
     setTodos((prev: Array<TodoType>) =>
       prev.map((todo: TodoType) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
+        todo.taskId === taskId ? { ...todo, complete: !todo.complete } : todo
       )
     )
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify(
         todos.map((todo: TodoType) =>
-          todo.id === id ? { ...todo, done: !todo.done } : todo
+          todo.taskId === taskId ? { ...todo, complete: !todo.complete } : todo
         )
       )
     )
   }
-  const deleteTodo = (id: string) => {
-    console.log("delete todo: ", id)
-    setTodos((prev: Array<TodoType>) => prev.filter((todo) => todo.id !== id))
+  const deleteTodo = (taskId: string) => {
+    console.log("delete todo: ", taskId)
+    setTodos((prev: Array<TodoType>) =>
+      prev.filter((todo) => todo.taskId !== taskId)
+    )
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(todos.filter((todo: TodoType) => todo.id !== id))
+      JSON.stringify(todos.filter((todo: TodoType) => todo.taskId !== taskId))
     )
     console.log("deleted the  todo")
   }
