@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { defaultProjects } from "../data/defaultProjects"
 import type { ProjectType } from "../types"
+import { ProjectPage } from "../pages/ProjectPage"
 const STORAGE_KEY = "momento_projects"
 
 export const useProjects = () => {
@@ -44,5 +45,9 @@ export const useProjects = () => {
     console.log("deleted the  project")
   }
 
-  return { projects, addProject, deleteProject }
+  const getProjectById = (id: string) => {
+    return projects.filter((project: ProjectType) => project.id == id)[0]
+  }
+
+  return { projects, addProject, deleteProject, getProjectById }
 }

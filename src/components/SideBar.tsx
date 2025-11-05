@@ -11,11 +11,16 @@ export const SideBar = () => {
     title: "",
     description: "",
   })
+
   const addNewProject = () => {
     console.log("in the side bar: add new proejct")
     addProject({
       id: uuidv4(),
       title: newProject.title.trim(),
+      slug: newProject.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, ""),
       description: newProject.description.trim(),
       createdAt: new Date().toISOString(),
     })
@@ -27,7 +32,6 @@ export const SideBar = () => {
   }
 
   const { projects, addProject, deleteProject } = useProjects()
-  console.log("projects; ", projects)
 
   return (
     <div className="flex flex-col gap-10 min-w-70 max-w-70 min-h-screen bg-amber-200 p-4">
@@ -45,7 +49,7 @@ export const SideBar = () => {
                 <Link
                   className="wrap-anywhere"
                   key={project.id}
-                  to="/projects/${project.title}"
+                  to={`/projects/${project.slug}/${project.id}`}
                 >
                   {project.title}
                 </Link>

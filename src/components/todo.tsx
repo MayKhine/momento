@@ -32,7 +32,9 @@ export const Todo = ({ todo, onToggle, onDelete }: TodoProps) => {
         </div>
       )}
 
-      <p className="grow align-top">{todo.title}</p>
+      {todo.done && <p className="grow align-top line-through">{todo.title}</p>}
+      {!todo.done && <p className="grow align-top">{todo.title}</p>}
+
       <button
         className=" hover:cursor-pointer  align-top self-start"
         onClick={() => {
