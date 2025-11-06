@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 import type { TodoType } from "../types"
 import { ActionButton } from "../components/ActionButton"
@@ -11,20 +11,12 @@ export const TodoPage = () => {
   const [newTodo, setNewTodo] = useState("")
   const [newTodoError, setNewTodoError] = useState(false)
 
-  // const toggleTask = (id: string) => {
-  //   setTodoList((prev: Array<TodoType>) =>
-  //     prev.map((todo: TodoType) =>
-  //       todo.id === id ? { ...todo, done: !todo.done } : todo
-  //     )
-  //   )
-  // }
-
   const addNewTodo = () => {
     if (newTodo.length == 0) {
       console.log(" no todo . len 0")
       return
     }
-    addTodo({ id: uuidv4(), title: newTodo, done: false })
+    addTodo({ taskId: uuidv4(), task: newTodo, complete: false })
     setNewTodo("")
   }
 
@@ -63,7 +55,7 @@ export const TodoPage = () => {
                 todo={todo}
                 onToggle={toggleTodo}
                 onDelete={() => {
-                  deleteTodo(todo.id)
+                  deleteTodo(todo.taskId)
                 }}
               />
             )

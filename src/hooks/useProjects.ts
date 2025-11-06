@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { defaultProjects } from "../data/defaultProjects"
 import type { ProjectType } from "../types"
 export const useProjects = () => {
@@ -11,34 +11,29 @@ export const useProjects = () => {
     } catch (e) {
       console.warn("Failed to parse stored todos:", e)
     }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProjects))
+
     return defaultProjects
   })
 
-  const addProject = (newProject: typeof projects) => {
-    console.log("In hook: add proejct")
-    if (newProject.title.length == 0) {
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(projects))
+    } catch (e) {
+      console.error("Failed to save projects:", e)
+    }
+  }, [projects])
+
+  const addProject = (newProject: ProjectType) => {
+    if (!newProject.title?.trim()) {
       console.log("title is empty")
       return
     }
-    setProjects((prev: Array<ProjectType>) => [...prev, newProject])
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...projects, newProject]))
-
-    console.log("added the new project")
+    setProjects((prev: Array<ProjectType>) => [newProject, ...prev]) // prepend newest
   }
 
   const deleteProject = (id: string) => {
-    console.log("delete proejct: ", id)
-    setProjects((prev: Array<ProjectType>) =>
-      prev.filter((project) => project.id !== id)
-    )
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(
-        projects.filter((project: ProjectType) => project.id !== id)
-      )
-    )
-    console.log("deleted the  project")
+    setProjects((prev: Array<ProjectType>) => prev.filter((p) => p.id !== id))
   }
 
   const getProjectById = (id: string) => {

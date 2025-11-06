@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { defaultTodos } from "../data/defaultTodos"
 import type { TodoType } from "../types"
 
@@ -12,20 +12,25 @@ export const useTodos = () => {
     } catch (e) {
       console.warn("Failed to parse stored todos:", e)
     }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultTodos))
+
     return defaultTodos
   })
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+    } catch (e) {
+      console.error("Failed to save projects:", e)
+    }
+  }, [todos])
+
   const addTodo = (newTodo: TodoType) => {
-    console.log("In hook: add todo")
-    if (newTodo.task.length == 0) {
-      console.log("Todo title is empty")
+    if (!newTodo.task?.trim()) {
+      console.log("Task is empty")
       return
     }
     setTodos((prev: Array<TodoType>) => [...prev, newTodo])
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...todos, newTodo]))
-
-    console.log("added the new todo")
   }
 
   const toggleTodo = (taskId: string) => {
@@ -34,25 +39,12 @@ export const useTodos = () => {
         todo.taskId === taskId ? { ...todo, complete: !todo.complete } : todo
       )
     )
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(
-        todos.map((todo: TodoType) =>
-          todo.taskId === taskId ? { ...todo, complete: !todo.complete } : todo
-        )
-      )
-    )
   }
+
   const deleteTodo = (taskId: string) => {
-    console.log("delete todo: ", taskId)
     setTodos((prev: Array<TodoType>) =>
       prev.filter((todo) => todo.taskId !== taskId)
     )
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(todos.filter((todo: TodoType) => todo.taskId !== taskId))
-    )
-    console.log("deleted the  todo")
   }
 
   return { todos, addTodo, deleteTodo, toggleTodo }

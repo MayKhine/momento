@@ -1,4 +1,4 @@
-export const projectsData = [
+export const defaultProjectsData = [
   {
     projectId: "default-1",
     projectData: [

@@ -12,3 +12,8 @@ export interface ProjectType {
   createdAt: string
   dueDate?: Date
 }
+
+export interface ProjectTypeForData {
+  projectId: string
+  projectData: Array<TodoType>
+}
